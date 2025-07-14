@@ -15,7 +15,7 @@ total_planned AS (
     FROM flights_cleaned
 ),
 total_cancelled AS (
-    SELECT COUNT(*) AS canceled_flights -- how many flights were canceled in total (departures & arrivals)
+    SELECT COUNT(*) AS cancelled_flights -- how many flights were canceled in total (departures & arrivals)
     FROM flights_cleaned
     WHERE cancelled = 1
 ),
@@ -30,38 +30,43 @@ total_actual AS (
     WHERE cancelled = 0 AND diverted = 0 
 ),
 avg_unique_airplanes_travelled AS (
-    SELECT ROUND(AVG(unique_planes), 2) AS avg_unique_airlines_per_day
-        FROM (  
-            SELECT flight_date, COUNT(DISTINCT tail_number) as unique_planes -- (optional) how many unique airplanes travelled on average
-            FROM flights_cleaned 
-            WHERE tail_number IS NOT NULL
-            GROUP BY flight_date
-        ) subquery,
+    SELECT ROUND(AVG(unique_planes), 2) AS avg_unique_airplanes_per_day
+    FROM (  
+        SELECT flight_date, COUNT(DISTINCT tail_number) AS unique_planes -- (optional) how many unique airplanes travelled on average
+        FROM flights_cleaned 
+        WHERE tail_number IS NOT NULL
+        GROUP BY flight_date
+    ) subquery
+),
 avg_unique_airlines_per_day AS ( 
     SELECT ROUND(AVG(unique_airline), 2) AS avg_unique_airlines_per_day
-        FROM (  
-            SELECT flight_date, COUNT(DISTINCT airline) as unique_airline -- (optional) how many unique airlines were in service on average
-            FROM flights_cleaned 
-            GROUP BY flight_date
-        ) subquery,
-WITH airports_cleaned AS (
-    SELECT * -- add city, country and name of the airport
+    FROM (  
+        SELECT flight_date, COUNT(DISTINCT airline) AS unique_airline -- (optional) how many unique airlines were in service on average
+        FROM flights_cleaned 
+        GROUP BY flight_date
+    ) subquery
+),
+airports_cleaned AS (
+    SELECT faa, name, city, country -- add city, country and name of the airport
     FROM {{ref('prep_airports')}}
 )
+
 SELECT 
-    num_unique_departures,
-    num_unique_arrivals,
-    total_flights,
-    cancelled_flights,
-    diverted_flights,
-    actual_flights,
-    avg_unique_airplanes_per_day,
-    avg_unique_airlines_per_day
-FROM unique_departures 
-CROSS JOIN unique_arrivals 
-CROSS JOIN total_planned 
-CROSS JOIN total_cancelled 
-CROSS JOIN total_diverted 
-CROSS JOIN total_actual 
-CROSS JOIN avg_unique_airplanes_travelled 
-CROSS JOIN avg_unique_airlines_per_day 
+    d.num_unique_departures,
+    a.num_unique_arrivals,
+    p.total_flights,
+    c.cancelled_flights,
+    v.diverted_flights,
+    act.actual_flights,
+    ap.avg_unique_airplanes_per_day,
+    al.avg_unique_airlines_per_day
+
+FROM unique_departures d
+CROSS JOIN unique_arrivals a
+CROSS JOIN total_planned p
+CROSS JOIN total_cancelled c
+CROSS JOIN total_diverted v
+CROSS JOIN total_actual act
+CROSS JOIN avg_unique_airplanes_travelled ap
+CROSS JOIN avg_unique_airlines_per_day al
+;

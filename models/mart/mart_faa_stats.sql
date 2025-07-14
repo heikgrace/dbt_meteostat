@@ -50,23 +50,20 @@ airports_cleaned AS (
     SELECT faa, name, city, country -- add city, country and name of the airport
     FROM {{ref('prep_airports')}}
 )
-
 SELECT 
-    d.num_unique_departures,
-    a.num_unique_arrivals,
-    p.total_flights,
-    c.cancelled_flights,
-    v.diverted_flights,
-    act.actual_flights,
-    ap.avg_unique_airplanes_per_day,
-    al.avg_unique_airlines_per_day
-
-FROM unique_departures d
-CROSS JOIN unique_arrivals a
-CROSS JOIN total_planned p
-CROSS JOIN total_cancelled c
-CROSS JOIN total_diverted v
-CROSS JOIN total_actual act
-CROSS JOIN avg_unique_airplanes_travelled ap
-CROSS JOIN avg_unique_airlines_per_day al
-;
+    num_unique_departures,
+    num_unique_arrivals,
+    total_flights,
+    cancelled_flights,
+    diverted_flights,
+    actual_flights,
+    avg_unique_airplanes_per_day,
+    avg_unique_airlines_per_day
+FROM unique_departures 
+CROSS JOIN unique_arrivals 
+CROSS JOIN total_planned 
+CROSS JOIN total_cancelled 
+CROSS JOIN total_diverted 
+CROSS JOIN total_actual 
+CROSS JOIN avg_unique_airplanes_travelled 
+CROSS JOIN avg_unique_airlines_per_day;

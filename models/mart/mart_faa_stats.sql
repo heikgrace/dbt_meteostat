@@ -66,4 +66,4 @@ CROSS JOIN total_cancelled
 CROSS JOIN total_diverted 
 CROSS JOIN total_actual 
 CROSS JOIN avg_unique_airplanes_travelled 
-CROSS JOIN avg_unique_airlines_per_day;
+CROSS JOIN avg_unique_airlines_per_day

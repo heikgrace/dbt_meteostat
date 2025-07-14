@@ -8,7 +8,7 @@ add_features AS (
 		, DATE_PART('month', date) AS date_month 	-- number of the month of year
 		, DATE_PART('year', date) AS date_year 		-- number of year
 		, DATE_PART('week', date) AS cw 			-- number of the week of year
-		, TO_CHAR(date, 'Month') AS month_name 	-- name of the month
+		, TRIM(TO_CHAR(date, 'Month')) AS month_name 	-- name of the month
 		, TO_CHAR(date, 'Day') AS weekday 		-- name of the weekday
     FROM daily_data 
 ),

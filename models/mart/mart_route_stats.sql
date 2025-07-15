@@ -32,8 +32,8 @@ joined_with_airports AS (
         airports_dest.country AS dest_country,
         airports_dest.name AS dest_airport_name
     FROM route_stats
-    LEFT JOIN airports airports_origin ON route_stats.origin = ao.faa
-    LEFT JOIN airports airports_dest ON route_stats.dest = ad.faa
+    LEFT JOIN airports airports_origin ON route_stats.origin = airports_origin.faa
+    LEFT JOIN airports airports_dest ON route_stats.dest = airports_dest.faa
 )
 
 SELECT *

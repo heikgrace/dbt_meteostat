@@ -38,4 +38,4 @@ joined_with_airports AS (
 
 SELECT *
 FROM joined_with_airports
-ORDER BY total_flights DESC;
+ORDER BY total_flights DESC

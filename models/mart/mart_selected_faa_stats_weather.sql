@@ -23,7 +23,6 @@ flights_per_airport_day AS (
         COUNT(DISTINCT tail_number) AS unique_airplanes,
         COUNT(DISTINCT airline) AS unique_airlines
     FROM (
-        -- Departures
         SELECT 
             flight_date,
             origin AS airport,
@@ -38,7 +37,6 @@ flights_per_airport_day AS (
 
         UNION ALL
 
-        -- Arrivals
         SELECT 
             flight_date,
             dest AS airport,

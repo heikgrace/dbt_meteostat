@@ -51,6 +51,10 @@ airports_cleaned AS (
     FROM {{ref('prep_airports')}}
 )
 SELECT 
+    airports_cleaned.city,
+    airports_cleaned.country,
+    airports_cleaned.faa,
+    airports_cleaned.name,
     num_unique_departures,
     num_unique_arrivals,
     total_flights,
@@ -59,7 +63,7 @@ SELECT
     actual_flights,
     avg_unique_airplanes_per_day,
     avg_unique_airlines_per_day
-FROM unique_departures 
+FROM unique_departures, airports_cleaned
 CROSS JOIN unique_arrivals 
 CROSS JOIN total_planned 
 CROSS JOIN total_cancelled 

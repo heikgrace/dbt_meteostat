@@ -1,12 +1,16 @@
 WITH flights_cleaned AS (
     SELECT 
-        origin AS airport_code,
-        season,
-        arr_delay,
-        cancelled,
-        diverted
-    FROM {{ ref('prep_flights') }}
-    WHERE arr_delay IS NOT NULL OR cancelled = 1 OR diverted = 1
+        f.origin AS airport_code,
+        f.flight_date,
+        w.season,
+        f.arr_delay,
+        f.cancelled,
+        f.diverted
+    FROM {{ ref('prep_flights') }} f
+    LEFT JOIN {{ ref('prep_weather_daily') }} w
+        ON f.flight_date = w.date
+        AND f.origin = w.airport_code
+    WHERE f.arr_delay IS NOT NULL OR f.cancelled = 1 OR f.diverted = 1
 ),
 
 seasonal_stats AS (
